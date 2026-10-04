@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The 406 Dragonwilds</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#06090d; --abyss:#0b1218; --deep:#101a22; --panel:rgba(14,22,30,.82); --panel2:rgba(22,32,42,.7);
+  --gold-hi:#fff2c6; --gold:#e8c26a; --gold-mid:#c99a3e; --gold-deep:#8a6424; --bronze:#3e2c12;
+  --ink:#efe6cf; --dim:#bdb08f; --faint:#7f7663;
+  --arcane:#7fd8ea; --ember:#ff8048; --verdant:#9ad97f;
+  --disp:"Cinzel Decorative","Cinzel",Georgia,serif;
+  --head:"Cinzel",Georgia,serif;
+  --body:"EB Garamond",Georgia,"Times New Roman",serif;
+  --line:linear-gradient(90deg,transparent,var(--gold-deep) 15%,var(--gold) 50%,var(--gold-deep) 85%,transparent);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--night);color:var(--ink)}
+body{font-family:var(--body);font-size:17px;line-height:1.5;min-height:100vh;
+  background:
+    radial-gradient(70% 45% at 50% -5%, rgba(232,194,106,.16), transparent 70%),
+    radial-gradient(60% 50% at 85% 30%, rgba(127,216,234,.06), transparent 70%),
+    radial-gradient(80% 60% at 10% 90%, rgba(201,154,62,.08), transparent 70%),
+    linear-gradient(180deg,#0b1218 0%,#070b10 55%,#05070a 100%);
+  background-attachment:fixed}
+#motes{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:28px 18px 70px}
+a{color:var(--gold)}
+
+/* ---------- gilded frame ---------- */
+.frame{position:relative;background:var(--panel);border:1px solid var(--gold-deep);
+  box-shadow:inset 0 0 0 3px rgba(6,9,13,.9), inset 0 0 0 4px rgba(232,194,106,.22), 0 0 0 1px rgba(0,0,0,.6), 0 14px 40px rgba(0,0,0,.45), 0 0 24px rgba(232,194,106,.06)}
+.frame::before,.frame::after{content:"";position:absolute;width:22px;height:22px;pointer-events:none;
+  background:
+    linear-gradient(var(--gold),var(--gold)) 0 0/22px 2px no-repeat,
+    linear-gradient(var(--gold),var(--gold)) 0 0/2px 22px no-repeat,
+    radial-gradient(circle at 6px 6px, var(--gold-hi) 0 2px, transparent 2.5px)}
+.frame::before{top:-2px;left:-2px}
+.frame::after{bottom:-2px;right:-2px;transform:rotate(180deg)}
+.gem{position:absolute;top:-6px;left:50%;width:11px;height:11px;transform:translateX(-50%) rotate(45deg);
+  background:linear-gradient(135deg,var(--gold-hi),var(--gold-mid) 55%,var(--gold-deep));box-shadow:0 0 10px rgba(255,226,150,.7)}
+
+/* ---------- hero ---------- */
+.hero{padding:40px 30px 30px;text-align:center;overflow:hidden}
+.hero::marker{display:none}
+.crest{width:110px;height:110px;margin:0 auto 14px;display:block;filter:drop-shadow(0 0 14px rgba(232,194,106,.45))}
+@media (prefers-reduced-motion:no-preference){.crest .spin{transform-origin:60px 60px;animation:spin 60s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}}
+.eyebrow{font-family:var(--head);font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:var(--arcane);margin:0 0 6px;text-shadow:0 0 10px rgba(127,216,234,.5)}
+h1{font-family:var(--disp);font-weight:900;margin:0;line-height:1.02;font-size:clamp(36px,7.4vw,74px);letter-spacing:.02em;
+  background:linear-gradient(100deg,var(--gold-deep) 0%,var(--gold) 22%,var(--gold-hi) 38%,var(--gold) 52%,var(--gold-mid) 70%,var(--gold-hi) 86%,var(--gold-deep) 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.6)) drop-shadow(0 0 18px rgba(232,194,106,.35))}
+@media (prefers-reduced-motion:no-preference){h1{animation:shimmer 7s ease-in-out infinite}@keyframes shimmer{0%,100%{background-position:0% 0}50%{background-position:100% 0}}}
+.tag{margin:12px auto 0;max-width:52ch;color:var(--dim);font-style:italic;font-size:18px}
+.flourish{display:block;margin:18px auto 0;width:min(420px,80%);height:18px}
+
+/* ---------- live bar ---------- */
+.live{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:22px}
+.pill{display:inline-flex;align-items:center;gap:9px;font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  padding:8px 16px;border:1px solid var(--gold-deep);background:rgba(6,9,13,.7);color:var(--dim)}
+.pill .dot{width:9px;height:9px;border-radius:50%;background:var(--faint)}
+.pill.up{color:var(--verdant);border-color:rgba(154,217,127,.6);box-shadow:0 0 16px rgba(154,217,127,.18)}
+.pill.up .dot{background:var(--verdant);box-shadow:0 0 8px var(--verdant)}
+.pill.down{color:var(--ember);border-color:rgba(255,128,72,.6)}.pill.down .dot{background:var(--ember)}
+.pill.lost{color:var(--faint)}
+@media (prefers-reduced-motion:no-preference){.pill.up .dot{animation:pulse 1.8s infinite}@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(154,217,127,.7)}70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}}
+.pill b{color:var(--gold-hi);font-weight:700}
+.who-online{font-size:16px;color:var(--dim)} .who-online b{color:var(--gold);font-weight:600}
+.synced{width:100%;margin-top:4px;font-family:var(--head);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.demo-flag{display:inline-block;margin-top:10px;font-family:var(--head);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ember);border:1px dashed var(--ember);padding:3px 10px}
+
+/* ---------- section heading ---------- */
+.rule{display:flex;align-items:center;gap:14px;margin:46px 0 18px}
+.rule .ln{flex:1;height:1px;background:var(--line)}
+.rule .ttl{text-align:center}
+.rule h2{font-family:var(--head);font-weight:700;font-size:clamp(20px,3.4vw,27px);letter-spacing:.12em;text-transform:uppercase;margin:0;color:var(--gold);
+  text-shadow:0 0 14px rgba(232,194,106,.35),0 2px 0 rgba(0,0,0,.7)}
+.rule .sub{font-style:italic;color:var(--faint);font-size:15px}
+.rule .dia{width:9px;height:9px;transform:rotate(45deg);background:var(--gold);box-shadow:0 0 8px rgba(232,194,106,.7);flex:0 0 auto}
+
+/* ---------- stat tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tile{padding:20px 16px 16px;text-align:center}
+.tile .n{font-family:var(--head);font-weight:700;font-size:clamp(30px,4.6vw,44px);line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums;
+  text-shadow:0 0 18px rgba(232,194,106,.45)}
+.tile .n small{font-size:.5em;color:var(--gold);margin-left:2px}
+.tile .l{margin-top:9px;font-family:var(--head);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.tile .s{margin-top:4px;font-size:14px;color:var(--faint);font-style:italic}
+.tile.warn .n{color:var(--ember);text-shadow:0 0 16px rgba(255,128,72,.35)}
+
+/* ---------- awards ---------- */
+.awards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.award{padding:20px 12px 16px;text-align:center}
+.award .sig{width:44px;height:44px;margin:0 auto 10px;display:grid;place-items:center;border-radius:50%;
+  border:1px solid var(--gold-mid);background:radial-gradient(circle at 35% 30%,rgba(255,242,198,.25),rgba(138,100,36,.15) 60%,transparent);
+  color:var(--gold-hi);font-size:21px;box-shadow:0 0 14px rgba(232,194,106,.25)}
+.award .cap{font-family:var(--head);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.award .nm{font-family:var(--head);font-weight:700;font-size:19px;margin:6px 0 2px;color:var(--ink);overflow-wrap:anywhere}
+.award .why{font-size:14px;color:var(--faint);font-style:italic}
+.award.empty .nm{color:var(--faint);font-weight:500}
+
+/* ---------- roster ---------- */
+.roster{padding:8px 0}
+.rrow{display:grid;grid-template-columns:44px minmax(110px,1.1fr) 2fr 80px 90px 110px;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(138,100,36,.25)}
+.rrow:last-child{border-bottom:0}
+.rrow.head{font-family:var(--head);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);padding-top:8px;padding-bottom:8px}
+.rank{font-family:var(--head);font-weight:700;color:var(--gold-mid);text-align:center;font-size:15px}
+.rrow:nth-child(2) .rank{color:var(--gold-hi);text-shadow:0 0 10px rgba(255,242,198,.6)}
+.pname{font-family:var(--head);font-weight:600;font-size:17px;display:flex;align-items:center;gap:8px;overflow-wrap:anywhere}
+.pname .on{width:8px;height:8px;border-radius:50%;background:var(--verdant);box-shadow:0 0 8px var(--verdant);flex:0 0 auto}
+.bar{position:relative;height:10px;background:rgba(62,44,18,.55);border-radius:0 4px 4px 0}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;background:linear-gradient(90deg,var(--gold-deep),var(--gold) 70%,var(--gold-hi));box-shadow:0 0 10px rgba(232,194,106,.35)}
+.num{font-variant-numeric:tabular-nums;text-align:right;color:var(--ink)} .num.dim{color:var(--dim)}
+.cellhrs{font-family:var(--head);font-weight:600;color:var(--gold-hi)}
+
+/* ---------- heatmap ---------- */
+.heat{padding:20px 20px 16px}
+.hgrid{display:grid;grid-template-columns:38px repeat(24,minmax(0,1fr));gap:3px;align-items:center}
+.hgrid .dl{font-family:var(--head);font-size:11px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.hgrid .c{aspect-ratio:1;border-radius:3px;background:rgba(62,44,18,.4)}
+.hgrid .hl{font-size:11px;white-space:nowrap;overflow:visible;color:var(--faint);text-align:center;font-family:var(--head)}
+.hlegend{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:12px;font-size:13px;color:var(--faint);font-style:italic}
+.hlegend .ramp{display:flex;gap:3px}.hlegend .ramp span{width:14px;height:14px;border-radius:3px}
+
+/* ---------- tabs / lists ---------- */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tab{font-family:var(--head);font-weight:600;font-size:12px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+  background:rgba(6,9,13,.6);color:var(--dim);border:1px solid rgba(138,100,36,.6);padding:9px 16px}
+.tab[aria-selected="true"]{color:var(--night);background:linear-gradient(180deg,var(--gold-hi),var(--gold) 60%,var(--gold-mid));border-color:var(--gold);box-shadow:0 0 14px rgba(232,194,106,.35)}
+.tab:focus-visible{outline:2px solid var(--arcane);outline-offset:2px}
+.more{text-align:center;padding:14px 0 16px}
+.panel{display:none}.panel.on{display:block}
+.entries{padding:6px 0}
+.entry{display:grid;grid-template-columns:42px 1fr auto;gap:14px;align-items:center;padding:13px 20px;border-bottom:1px solid rgba(138,100,36,.22)}
+.entry:last-child{border-bottom:0}
+.entry .ic{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--gold-deep);transform:rotate(45deg);background:rgba(232,194,106,.06)}
+.entry .ic span{transform:rotate(-45deg);color:var(--gold-hi);font-size:15px}
+.entry.bad .ic{border-color:rgba(255,128,72,.6)} .entry.bad .ic span{color:var(--ember)}
+.entry.arc .ic{border-color:rgba(127,216,234,.55)} .entry.arc .ic span{color:var(--arcane)}
+.entry .tt{font-family:var(--head);font-weight:600;font-size:16px;color:var(--ink)}
+.entry .nt{font-size:15px;color:var(--dim);font-style:italic}
+.entry .when{font-family:var(--head);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);text-align:right;white-space:nowrap}
+.sealed{text-align:center;padding:34px 24px 30px;color:var(--dim)}
+.sealed .seal{width:62px;height:62px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:26px;color:var(--gold-hi);
+  background:radial-gradient(circle at 35% 30%,#b8492d,#7a2414 70%);box-shadow:0 0 0 3px rgba(122,36,20,.5),0 0 18px rgba(255,128,72,.25)}
+.sealed .big{font-family:var(--head);font-weight:700;color:var(--gold);font-size:19px;letter-spacing:.06em}
+.sealed p{margin:6px auto 0;max-width:56ch;font-style:italic}
+.sealed .plain{font-style:normal;font-size:14px;color:var(--faint);margin-top:10px}
+
+/* ---------- skills ---------- */
+.skills .scroll{overflow-x:auto}
+.skills table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.skills th,.skills td{padding:10px 12px;border-bottom:1px solid rgba(138,100,36,.25);text-align:center}
+.skills th{font-family:var(--head);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.skills td:first-child,.skills th:first-child{text-align:left;font-family:var(--head);font-weight:600;color:var(--ink)}
+.skills td.best{color:var(--gold-hi);text-shadow:0 0 10px rgba(232,194,106,.5);font-weight:600}
+.skills td.max{color:var(--arcane);text-shadow:0 0 10px rgba(127,216,234,.6)}
+.skills td.tot{font-family:var(--head);font-weight:700;color:var(--gold-hi)}
+.skills td,.skills th{white-space:nowrap}
+.skills td:first-child{position:sticky;left:0;background:#0f171e;z-index:1}
+.skills .foot{margin:0;padding:10px 16px 14px;font-size:14px;color:var(--faint);font-style:italic}
+.deeds{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.deeds:empty{display:none}
+.deed{padding:18px 18px 12px}
+.deed .dn{font-family:var(--head);font-weight:700;font-size:19px;color:var(--gold-hi)}
+.deed .hc{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember);border:1px solid var(--ember);padding:1px 6px;vertical-align:middle}
+.deed .ds{font-size:14px;color:var(--faint);font-style:italic;margin:2px 0 10px}
+.deed .dd{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-top:1px solid rgba(138,100,36,.2);font-size:15px;color:var(--dim)}
+.deed .dd b{font-family:var(--head);color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---------- health charts ---------- */
+.chart{padding:18px 20px 14px}
+.chart h3{margin:0 0 2px;font-family:var(--head);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.chart .cs{font-size:14px;color:var(--faint);font-style:italic;margin-bottom:8px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .axis{font-family:var(--head);font-size:11px;fill:var(--faint)}
+.two{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+.vault{display:flex;flex-wrap:wrap;gap:8px;padding:16px 20px}
+.chest{font-family:var(--head);font-size:12px;letter-spacing:.06em;padding:7px 11px;border:1px solid rgba(138,100,36,.6);background:rgba(6,9,13,.55);color:var(--dim)}
+.chest b{color:var(--gold-hi);font-weight:600}
+.chest.first{border-color:var(--gold);box-shadow:0 0 12px rgba(232,194,106,.25)}
+
+#tip{position:fixed;z-index:100;pointer-events:none;opacity:0;transition:opacity .12s;max-width:240px;
+  background:rgba(8,12,17,.96);border:1px solid var(--gold-mid);padding:8px 11px;font-size:14px;color:var(--ink);box-shadow:0 6px 20px rgba(0,0,0,.6)}
+#tip b{font-family:var(--head);color:var(--gold-hi);font-weight:600;display:block;font-size:13px;letter-spacing:.05em}
+
+/* ---------- trophy hall ---------- */
+.hunters{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.hunter{padding:16px 16px 14px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.hunter[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 3px rgba(6,9,13,.9), inset 0 0 0 4px rgba(232,194,106,.5), 0 0 22px rgba(232,194,106,.3)}
+.hunter:focus-visible{outline:2px solid var(--arcane);outline-offset:3px}
+.hunter .hn{font-family:var(--head);font-weight:700;font-size:18px;color:var(--gold-hi);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.hunter .hn small{font-size:12px;color:var(--dim);font-weight:600;letter-spacing:.08em}
+.hunter .tally{display:flex;gap:10px;margin:8px 0 10px;font-family:var(--head);font-size:13px;color:var(--ink)}
+.hunter .tally span{display:inline-flex;align-items:center;gap:3px}
+.hunter .tally svg{width:16px;height:16px}
+.pbar{height:6px;background:rgba(62,44,18,.55);border-radius:0 3px 3px 0;position:relative}
+.pbar i{position:absolute;left:0;top:0;bottom:0;border-radius:0 3px 3px 0;background:linear-gradient(90deg,var(--gold-deep),var(--gold),var(--gold-hi))}
+.hunter .pct{margin-top:5px;font-size:13px;color:var(--faint);font-style:italic}
+.tfilters{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 12px}
+.tfilters .gap{width:14px}
+.trophies{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.tro{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;padding:12px 14px;background:var(--panel);border:1px solid rgba(138,100,36,.45)}
+.tro.got{border-color:rgba(232,194,106,.55);box-shadow:0 0 14px rgba(232,194,106,.08)}
+.tro.got.platinum{border-color:rgba(201,230,242,.7);box-shadow:0 0 22px rgba(127,216,234,.25)}
+.tro svg{width:52px;height:52px}
+.tro:not(.got) svg{opacity:.38;filter:grayscale(1)}
+.tro .tn{font-family:var(--head);font-weight:700;font-size:15px;color:var(--ink);line-height:1.2}
+.tro:not(.got) .tn{color:var(--dim)}
+.tro .td{font-size:14px;color:var(--dim);line-height:1.3;margin-top:2px}
+.tro .tm{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:6px;font-family:var(--head);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.tro .tier.bronze{color:#d9955c}.tro .tier.silver{color:#c9d1da}.tro .tier.gold{color:var(--gold)}.tro .tier.platinum{color:#bfe6f5}
+.tro .when{color:var(--verdant)}
+.tro .pbar{margin-top:7px}
+.tro .pv{font-size:12px;color:var(--faint);margin-top:3px;font-variant-numeric:tabular-nums}
+.recent{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.recent .chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border:1px solid rgba(138,100,36,.55);background:rgba(6,9,13,.6);font-size:14px;color:var(--dim)}
+.recent .chip svg{width:18px;height:18px}.recent .chip b{color:var(--ink);font-family:var(--head);font-weight:600}
+footer{margin-top:50px;text-align:center;color:var(--faint);font-size:14px;font-style:italic}
+footer .dia{display:inline-block;width:6px;height:6px;transform:rotate(45deg);background:var(--gold-mid);margin:0 10px 2px}
+
+@media (max-width:900px){.deeds{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:760px){
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .awards{grid-template-columns:repeat(2,1fr)}
+  .deeds{grid-template-columns:1fr}
+  .rrow{grid-template-columns:32px 1fr 70px;row-gap:6px}
+  .rrow .bar{grid-column:2/4;grid-row:2}
+  .rrow .hide-sm{display:none}
+  .hgrid{grid-template-columns:30px repeat(24,minmax(0,1fr));gap:2px}
+  .hgrid .hl{font-size:9px;text-align:left}
+  .rrow.head{display:none}
+  .rule .ln{display:none}
+  .hero{padding:30px 16px 24px}
+}
+</style>
+</head>
+<body>
+<canvas id="motes" aria-hidden="true"></canvas>
+<div id="tip" role="tooltip"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="tg-bronze" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0bd8c"/><stop offset=".5" stop-color="#b8743c"/><stop offset="1" stop-color="#6b3d1c"/></linearGradient>
+    <linearGradient id="tg-silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#b9c2cc"/><stop offset="1" stop-color="#5f6a76"/></linearGradient>
+    <linearGradient id="tg-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2c6"/><stop offset=".5" stop-color="#e8c26a"/><stop offset="1" stop-color="#8a6424"/></linearGradient>
+    <linearGradient id="tg-platinum" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4fdff"/><stop offset=".45" stop-color="#9fdcf2"/><stop offset="1" stop-color="#3f7fa6"/></linearGradient>
+  </defs>
+</svg>
+<main class="wrap">
+
+  <header class="frame hero"><span class="gem"></span>
+    <svg class="crest" viewBox="0 0 120 120" aria-hidden="true">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2c6"/><stop offset=".5" stop-color="#e8c26a"/><stop offset="1" stop-color="#8a6424"/></linearGradient>
+      </defs>
+      <g class="spin" fill="none" stroke="url(#g1)">
+        <circle cx="60" cy="60" r="55" stroke-width="1.2" stroke-dasharray="2 5"/>
+        <circle cx="60" cy="60" r="49" stroke-width="2"/>
+        <g stroke-width="2"><path d="M60 3v9M60 108v9M3 60h9M108 60h9M20 20l6 6M94 94l6 6M100 20l-6 6M26 94l-6 6"/></g>
+      </g>
+      <path d="M60 18 L94 60 L60 102 L26 60 Z" fill="rgba(232,194,106,.08)" stroke="url(#g1)" stroke-width="2.4"/>
+      <path d="M60 30 L84 60 L60 90 L36 60 Z" fill="none" stroke="url(#g1)" stroke-width="1" opacity=".6"/>
+      <text x="60" y="69" text-anchor="middle" font-family="Cinzel, serif" font-weight="700" font-size="25" fill="url(#g1)">406</text>
+    </svg>
+    <p class="eyebrow">Realm of Ashenfall</p>
+    <h1>The 406 Dragonwilds</h1>
+    <p class="tag">A living chronicle of our adventurers, written by the server itself.</p>
+    <svg class="flourish" viewBox="0 0 420 18" aria-hidden="true">
+      <defs><linearGradient id="fl" x1="0" x2="1"><stop offset="0" stop-color="#e8c26a" stop-opacity="0"/><stop offset=".5" stop-color="#e8c26a"/><stop offset="1" stop-color="#e8c26a" stop-opacity="0"/></linearGradient></defs>
+      <path d="M0 9 H170 M250 9 H420" stroke="url(#fl)" stroke-width="1.2"/>
+      <path d="M170 9 q15 -9 30 0 q-15 9 -30 0 M250 9 q-15 -9 -30 0 q15 9 30 0" fill="none" stroke="#c99a3e" stroke-width="1.2"/>
+      <rect x="204" y="3" width="12" height="12" transform="rotate(45 210 9)" fill="#e8c26a"/>
+    </svg>
+    <div class="live">
+      <span class="pill" id="status"><span class="dot"></span><span id="status-txt">Summoning…</span></span>
+      <span class="pill" id="count"><b id="count-n">–</b>&nbsp;/ <span id="count-max">6</span> adventurers</span>
+      <span class="pill" id="uptime" hidden>Awake <b id="uptime-v"></b></span>
+      <div class="who-online" id="who-online"></div>
+      <div class="synced" id="synced"></div>
+    </div>
+    <div id="demo"></div>
+  </header>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>The Ledger</h2><div class="sub">deeds, tallied</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section class="tiles" id="ledger"></section>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>Hall of Honours</h2><div class="sub">titles bestowed upon the worthy</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section class="awards" id="awards"></section>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>Adventurers' Roll</h2><div class="sub">hours spent in Ashenfall</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section class="frame roster" id="roster"><span class="gem"></span></section>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>When the Realm Wakes</h2><div class="sub">hours adventured, by weekday and hour (your local time)</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section class="frame heat"><span class="gem"></span><div class="hgrid" id="heat"></div>
+    <div class="hlegend">fewer hours <span class="ramp" id="heat-ramp"></span> more hours</div></section>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>Skills of the Realm</h2><div class="sub">the race to 99, and each adventurer's deeds</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section class="frame skills" id="skills"><span class="gem"></span></section>
+  <section class="deeds" id="deeds"></section>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>Trophy Hall</h2><div class="sub">100 trophies: bronze, silver, gold, and one platinum</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section id="hall">
+    <div class="hunters" id="hunters"></div>
+    <div class="recent" id="recent"></div>
+    <div class="tfilters" id="tfilters"></div>
+    <div class="trophies" id="trophies"></div>
+    <div class="more" id="tmore"></div>
+  </section>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>The Chronicle</h2><div class="sub">as recorded by the scribes</div></div><span class="dia"></span><span class="ln"></span></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-p="chron">Chronicle</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="bosses">Bosses Felled</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="graves">Gravestones</button>
+  </div>
+  <section class="frame"><span class="gem"></span>
+    <div class="panel on" id="p-chron"><div class="entries" id="list-chron"></div></div>
+    <div class="panel" id="p-bosses"><div class="entries" id="list-bosses"></div></div>
+    <div class="panel" id="p-graves"><div class="entries" id="list-graves"></div></div>
+  </section>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>Heart of the Server</h2><div class="sub">the last seven days</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section class="tiles" id="health"></section>
+  <div class="two">
+    <section class="frame chart"><span class="gem"></span><h3>Memory in use</h3><div class="cs">How much RAM the server is using. Ember bands mark time it was down.</div><div id="ram"></div></section>
+    <section class="frame chart"><span class="gem"></span><h3>Adventurers online</h3><div class="cs">Out of 6.</div><div id="pop"></div></section>
+  </div>
+
+  <div class="rule"><span class="ln"></span><span class="dia"></span><div class="ttl"><h2>The Vault</h2><div class="sub">world backups, kept safe</div></div><span class="dia"></span><span class="ln"></span></div>
+  <section class="tiles" id="vault-tiles"></section>
+  <section class="frame" style="margin-top:14px"><span class="gem"></span><div class="vault" id="vault"></div></section>
+
+  <footer><span class="dia"></span>Find us under Worlds → Public → “406 Dragonwilds”<span class="dia"></span></footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var DEMO = /[?&]demo\b/.test(location.search);
+  var SRC = DEMO ? "data.sample.json" : "data.json";
+  var REFRESH = 90000, STALE = 25 * 60000;
+  var HOUR = 3600000, DAY = 86400000;
+  var D = null;
+
+  // ---------- helpers ----------
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function t(s){ return new Date(s).getTime(); }
+  function dur(ms){
+    ms = Math.max(0, ms); var m = Math.round(ms / 60000);
+    if (m < 60) return m + "m";
+    var h = Math.floor(m / 60); m = m % 60;
+    if (h < 48) return h + "h" + (m ? " " + m + "m" : "");
+    var d = Math.floor(h / 24); h = h % 24; return d + "d" + (h ? " " + h + "h" : "");
+  }
+  function hrs(ms){ var h = ms / HOUR; return h < 10 ? h.toFixed(1) : Math.round(h).toLocaleString(); }
+  function ago(ms){
+    var s = Math.max(0, (Date.now() - ms) / 1000);
+    if (s < 60) return "just now"; if (s < 3600) return Math.floor(s / 60) + "m ago";
+    if (s < 86400) return Math.floor(s / 3600) + "h ago"; return Math.floor(s / 86400) + "d ago";
+  }
+  function day(ms){ return new Date(ms).toLocaleDateString(undefined, {month:"short", day:"numeric"}); }
+  function when(ms){ return new Date(ms).toLocaleString(undefined, {month:"short", day:"numeric", hour:"numeric", minute:"2-digit"}); }
+  function roman(n){ var r = "", v = [10,"X",9,"IX",5,"V",4,"IV",1,"I"]; for (var i = 0; i < v.length; i += 2) while (n >= v[i]) { r += v[i+1]; n -= v[i]; } return r; }
+  var DAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  function hourLabel(h){ return h === 0 ? "12am" : h < 12 ? h + "am" : h === 12 ? "12pm" : (h - 12) + "pm"; }
+  function sealed(icon, big, flavour, plain){
+    return '<div class="sealed"><div class="seal">' + icon + '</div><div class="big">' + big + '</div><p>' + flavour + '</p>' +
+      (plain ? '<p class="plain">' + plain + '</p>' : '') + '</div>';
+  }
+
+  // ---------- derived model ----------
+  function model(){
+    var now = D.updated || Date.now();
+    var ss = (D.sessions || []).map(function(s){
+      var a = t(s.start), b = s.end ? t(s.end) : now; return { who: s.who, a: a, b: Math.max(a, b), open: !s.end };
+    }).sort(function(x, y){ return x.a - y.a; });
+    var P = {};
+    ss.forEach(function(s){
+      var p = P[s.who] || (P[s.who] = { name: s.who, total: 0, n: 0, longest: 0, first: s.a, last: 0, night: 0, dawn: 0, online: false });
+      var d = s.b - s.a; p.total += d; p.n++; p.longest = Math.max(p.longest, d); p.last = Math.max(p.last, s.b);
+      if (s.open) p.online = true;
+      eachHour(s, function(dow, h, ms){
+        if (h >= 23 || h < 4) p.night += ms;
+        if (h >= 5 && h < 9) p.dawn += ms;
+      });
+    });
+    (D.online || []).forEach(function(n){ if (P[n]) P[n].online = true; });
+    var players = Object.keys(P).map(function(k){ return P[k]; }).sort(function(a, b){ return b.total - a.total; });
+    return { now: now, sessions: ss, players: players };
+  }
+  // split a session at local hour boundaries: cb(dayOfWeekMonFirst, hour, ms)
+  function eachHour(s, cb){
+    var c = s.a, guard = 0;
+    while (c < s.b && guard++ < 5000) {
+      var d = new Date(c); var nx = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() + 1).getTime();
+      var e = Math.min(nx, s.b); cb((d.getDay() + 6) % 7, d.getHours(), e - c); c = e;
+    }
+  }
+
+  // ---------- live ----------
+  function renderLive(){
+    var stale = Date.now() - D.updated > STALE, up = D.server && D.server.online;
+    var st = $("status"), tx = $("status-txt");
+    st.className = "pill " + (stale ? "lost" : up ? "up" : "down");
+    tx.textContent = stale ? "The scribes are silent" : up ? "The realm is open" : "The realm slumbers";
+    var on = D.online || [];
+    $("count-n").textContent = (stale || !up) ? "–" : on.length;
+    $("count-max").textContent = (D.server && D.server.maxPlayers) || 6;
+    $("who-online").innerHTML = (!stale && up && on.length) ? "Now adventuring: " + on.map(function(n){ return "<b>" + esc(n) + "</b>"; }).join(", ") : "";
+    var ut = $("uptime");
+    if (!stale && up && D.server.startedAt) { ut.hidden = false; $("uptime-v").textContent = dur(Date.now() - t(D.server.startedAt)); } else ut.hidden = true;
+    $("synced").textContent = "Last word from the server " + ago(D.updated);
+    $("demo").innerHTML = (DEMO || D.demo) ? '<span class="demo-flag">Sample data, not the real server</span>' : "";
+  }
+
+  function tile(n, label, sub, cls){
+    return '<div class="frame tile ' + (cls || "") + '"><span class="gem"></span><div class="n">' + n + '</div><div class="l">' + label + '</div>' + (sub ? '<div class="s">' + sub + '</div>' : "") + '</div>';
+  }
+
+  function renderLedger(M){
+    var total = M.players.reduce(function(a, p){ return a + p.total; }, 0);
+    var longest = M.sessions.reduce(function(a, s){ return (s.b - s.a) > (a ? a.b - a.a : 0) ? s : a; }, null);
+    var firstStart = (D.events || []).filter(function(e){ return e.kind === "start"; })[0];
+    $("ledger").innerHTML =
+      tile(M.players.length, "Adventurers", M.players.length ? "have walked these lands" : "awaiting the first") +
+      tile(hrs(total) + "<small>h</small>", "Hours adventured", "across every soul") +
+      tile(M.sessions.length.toLocaleString(), "Expeditions", "separate times someone joined") +
+      tile(longest ? dur(longest.b - longest.a) : "–", "Longest expedition", longest ? esc(longest.who) + ", " + day(longest.a) : (firstStart ? "realm raised " + day(t(firstStart.t)) : ""));
+  }
+
+  function renderAwards(M){
+    var P = M.players;
+    function best(key, min){ var b = null; P.forEach(function(p){ if (p[key] > (b ? b[key] : (min || 0))) b = p; }); return b; }
+    var devoted = best("total"), marathon = best("longest"), owl = best("night", 10 * 60000), dawn = best("dawn", 10 * 60000);
+    var C = chars(), sage = C[0] && C[0].total > SKILLS.length ? { name: C[0].c.name, total: C[0].total } : null;
+    var slayer = null; C.forEach(function(x){ if ((+x.c.foes || 0) > (slayer ? slayer.foes : 0)) slayer = { name: x.c.name, foes: +x.c.foes }; });
+    function card(sig, cap, p, why){
+      return '<div class="frame award ' + (p ? "" : "empty") + '"><span class="gem"></span><div class="sig">' + sig + '</div><div class="cap">' + cap + '</div>' +
+        '<div class="nm">' + (p ? esc(p.name) : "Unclaimed") + '</div><div class="why">' + (p ? why : "no one has earned it yet") + '</div></div>';
+    }
+    $("awards").innerHTML =
+      card("✦", "Most Devoted", devoted, devoted && hrs(devoted.total) + " hours in the realm") +
+      card("⌛", "Marathon Delver", marathon, marathon && dur(marathon.longest) + " in one sitting") +
+      card("☾", "Night Owl", owl, owl && hrs(owl.night) + "h between 11pm and 4am") +
+      card("☀", "Early Riser", dawn, dawn && hrs(dawn.dawn) + "h between 5am and 9am") +
+      card("✠", "Grand Sage", sage, sage && "total level " + sage.total) +
+      card("⚔", "Slayer", slayer, slayer && slayer.foes + " kinds of foe slain");
+  }
+
+  function renderRoster(M){
+    var el = $("roster");
+    if (!M.players.length) {
+      el.innerHTML = '<span class="gem"></span>' + sealed("✧", "The roll is blank", "No adventurer has yet set foot in Ashenfall. The first to arrive will be inscribed here.");
+      return;
+    }
+    var max = M.players[0].total || 1;
+    var h = '<span class="gem"></span><div class="rrow head"><span></span><span>Adventurer</span><span></span><span class="num">Hours</span><span class="num hide-sm">Visits</span><span class="num hide-sm">Last seen</span></div>';
+    M.players.forEach(function(p, i){
+      h += '<div class="rrow"><span class="rank">' + roman(i + 1) + '</span>' +
+        '<span class="pname">' + (p.online ? '<span class="on" title="online now"></span>' : "") + esc(p.name) + '</span>' +
+        '<span class="bar" data-tip="<b>' + esc(esc(p.name)) + '</b>' + hrs(p.total) + 'h over ' + p.n + ' visits<br>longest: ' + dur(p.longest) + '"><i style="width:' + Math.max(2, p.total / max * 100) + '%"></i></span>' +
+        '<span class="num cellhrs">' + hrs(p.total) + 'h</span>' +
+        '<span class="num dim hide-sm">' + p.n + '</span>' +
+        '<span class="num dim hide-sm">' + (p.online ? "now" : ago(p.last)) + '</span></div>';
+    });
+    el.innerHTML = h;
+  }
+
+  var RAMP = [0.10, 0.24, 0.42, 0.66, 1];
+  function heatColor(f){ // one hue, gold: light-to-bright on the dark ground
+    if (f <= 0) return "rgba(62,44,18,.4)";
+    var i = Math.min(RAMP.length - 1, Math.floor(f * RAMP.length));
+    return ["rgba(138,100,36,.55)","rgba(170,124,48,.75)","rgba(201,154,62,.9)","rgb(232,194,106)","rgb(255,236,180)"][i];
+  }
+  function renderHeat(M){
+    var B = []; for (var d = 0; d < 7; d++) { B.push([]); for (var h = 0; h < 24; h++) B[d].push(0); }
+    M.sessions.forEach(function(s){ eachHour(s, function(dw, hr, ms){ B[dw][hr] += ms; }); });
+    var max = 0; B.forEach(function(r){ r.forEach(function(v){ max = Math.max(max, v); }); });
+    var g = '<span></span>';
+    for (var h2 = 0; h2 < 24; h2++) g += '<span class="hl">' + (h2 % 3 === 0 ? hourLabel(h2).replace("am","a").replace("pm","p") : "") + '</span>';
+    for (var d2 = 0; d2 < 7; d2++) {
+      g += '<span class="dl">' + DAYS[d2] + '</span>';
+      for (var h3 = 0; h3 < 24; h3++) {
+        var v = B[d2][h3];
+        g += '<span class="c" style="background:' + heatColor(max ? v / max : 0) + (v === max && v ? ';box-shadow:0 0 10px rgba(255,236,180,.6)' : '') + '" data-tip="<b>' + DAYS[d2] + ' ' + hourLabel(h3) + '</b>' + (v ? dur(v) + ' adventured, all time' : 'no one has played at this hour yet') + '"></span>';
+      }
+    }
+    $("heat").innerHTML = g;
+    $("heat-ramp").innerHTML = RAMP.map(function(f){ return '<span style="background:' + heatColor(f - 0.01) + '"></span>'; }).join("");
+  }
+
+
+  // Dragonwilds experience table: XP[n] = total XP needed for level n.
+  var XP = [null,0,33,70,111,156,206,261,322,389,463,545,636,736,847,969,1104,1253,1417,1598,1798,2018,2261,2529,2825,3152,3512,3910,4349,4833,5367,5957,6608,7326,8118,8993,9958,11023,12199,13496,14929,16510,18255,20181,22307,24654,27245,30105,33262,36747,40594,44581,48717,52997,57421,61990,66702,71560,76562,81708,86998,92433,98012,103735,109603,115616,121772,128073,134518,141108,147842,154721,161743,168910,176222,183678,191278,199022,206911,214944,223122,231444,239910,248521,257276,266176,275219,284407,293740,303217,312838,322604,332514,342568,395129,447689,543044,666881,819200,1000000];
+  var ABBR = {Attack:"Atk",Magic:"Mage",Ranged:"Range",Mining:"Mine",Woodcutting:"WC",Fishing:"Fish",Cooking:"Cook",Farming:"Farm",Artisan:"Art",Construction:"Con",Runecrafting:"RC",Agility:"Agil"};
+  var SKILLS = ["Attack","Magic","Ranged","Mining","Woodcutting","Fishing","Cooking","Farming","Artisan","Construction","Runecrafting","Agility"];
+  function lvl(xp){ var l = 1; for (var n = 2; n <= 99; n++) if (xp >= XP[n]) l = n; return l; }
+  function chars(){
+    return (D.characters || []).filter(function(c){ return c && c.name; }).map(function(c){
+      var L = {}, tot = 0, xp = 0;
+      SKILLS.forEach(function(s){ var v = +(c.skills && c.skills[s]) || 0; L[s] = lvl(v); tot += L[s]; xp += v; });
+      return { c: c, L: L, total: tot, xp: xp };
+    }).sort(function(a, b){ return b.total - a.total || b.xp - a.xp; });
+  }
+  function num(n){ return (+n || 0).toLocaleString(); }
+  function renderSkills(){
+    var C = chars(), el = $("skills");
+    if (!C.length) {
+      el.innerHTML = '<span class="gem"></span>' + sealed("✠", "This tome is still sealed",
+        "No adventurer's skills have been recorded yet. Once someone plays and the world saves, their levels appear here and the race to 99 begins.");
+      $("deeds").innerHTML = "";
+      return;
+    }
+    var best = {}; SKILLS.forEach(function(s){ best[s] = Math.max.apply(null, C.map(function(x){ return x.L[s]; })); });
+    var h = '<span class="gem"></span><div class="scroll"><table><thead><tr><th>Adventurer</th>' +
+      SKILLS.map(function(s){ return '<th data-tip="<b>' + s + '</b>">' + ABBR[s] + '</th>'; }).join("") + '<th>Total</th></tr></thead><tbody>';
+    C.forEach(function(x){
+      h += '<tr><td>' + esc(x.c.name) + '</td>' + SKILLS.map(function(s){
+        var v = x.L[s], xp = +x.c.skills[s] || 0, nx = v < 99 ? XP[v + 1] : null;
+        var tip = '<b>' + esc(esc(x.c.name)) + ' · ' + s + ' ' + v + '</b>' + num(xp) + ' XP' + (nx ? '<br>' + num(nx - xp) + ' XP to level ' + (v + 1) : '<br>Mastered!');
+        return '<td class="' + (v > 1 && v === best[s] ? "best" : "") + (v >= 99 ? " max" : "") + '" data-tip="' + tip + '">' + v + '</td>';
+      }).join("") + '<td class="tot" data-tip="<b>Total level</b>' + num(x.xp) + ' XP across all skills">' + x.total + '</td></tr>';
+    });
+    el.innerHTML = h + '</tbody></table></div><p class="foot">Level per skill, read from the world save. Hover a number for XP. The highest level in each skill glows.</p>';
+
+    $("deeds").innerHTML = C.map(function(x){
+      var c = x.c;
+      function d(k, v){ return '<div class="dd"><span>' + k + '</span><b>' + num(v) + '</b></div>'; }
+      return '<div class="frame deed"><span class="gem"></span><div class="dn">' + esc(c.name) + (c.hardcore ? ' <span class="hc">Hardcore</span>' : '') + '</div>' +
+        '<div class="ds">' + dur((+c.playSec || 0) * 1000) + ' played (whole character) · total level ' + x.total + '</div>' +
+        d("Recipes learned", c.recipes) + d("Unique foes slain", c.foes) + d("Landmarks revealed", c.landmarks) +
+        d("Quests on the scroll", c.quests) + d("Spells unlocked", c.spells) + d("Journal entries", c.journal) +
+        d("Buildings unlocked", c.buildings) + d("Shrines", c.shrines) + d("Mounts", c.mounts) + '</div>';
+    }).join("");
+  }
+
+  function entry(cls, ic, title, note, ts){
+    return '<div class="entry ' + cls + '"><div class="ic"><span>' + ic + '</span></div><div><div class="tt">' + title + '</div>' + (note ? '<div class="nt">' + note + '</div>' : '') + '</div><div class="when">' + (ts ? when(ts) : "") + '</div></div>';
+  }
+  var chronOpen = false;
+  function renderChronicle(M){
+    var out = [];
+    var starts = (D.events || []).filter(function(e){ return e.kind === "start"; });
+    if (starts.length) out.push({ ts: t(starts[0].t), html: entry("arc", "✧", "The realm of Ashenfall awakens", "The 406 Dragonwilds world is raised for the first time.", t(starts[0].t)) });
+    var prevBuild = starts.length ? starts[0].note : "";
+    (D.events || []).forEach(function(e){
+      if (e.kind === "start" && e.note && prevBuild && e.note !== prevBuild)
+        out.push({ ts: t(e.t), html: entry("arc", "⟡", "A new patch sweeps the land", "Game build " + esc(prevBuild) + " → " + esc(e.note), t(e.t)) });
+      if (e.kind === "start" && e.note) prevBuild = e.note;
+      if (e.kind === "crash")
+        out.push({ ts: t(e.t), html: entry("bad", "✕", "The realm fell into sudden darkness", "The server stopped without saying goodbye: a crash, or its window was closed.", t(e.t)) });
+    });
+    var seen = {}, cum = {}, rec = 0, MILES = [10, 25, 50, 100, 250, 500, 1000];
+    M.sessions.forEach(function(s){
+      if (!seen[s.who]) { seen[s.who] = 1; out.push({ ts: s.a, html: entry("", "❖", esc(s.who) + " first sets foot in Ashenfall", "A new name joins the roll.", s.a) }); }
+      var before = cum[s.who] || 0, after = before + (s.b - s.a); cum[s.who] = after;
+      MILES.forEach(function(m){
+        if (before < m * HOUR && after >= m * HOUR) { var at = s.a + (m * HOUR - before); out.push({ ts: at, html: entry("", "✦", esc(s.who) + " reaches " + m + " hours", "A milestone of devotion.", at) }); }
+      });
+      var d = s.b - s.a;
+      if (d > rec && d >= 2 * HOUR && !s.open) { rec = d; out.push({ ts: s.b, html: entry("", "⌛", esc(s.who) + " sets a new record expedition", dur(d) + " in a single sitting.", s.b) }); }
+      else if (d > rec) rec = Math.max(rec, s.open ? rec : d);
+    });
+    trophyUnlocks().forEach(function(f){
+      if (f.d.tier !== "gold" && f.d.tier !== "platinum") return;
+      var plat = f.d.tier === "platinum";
+      out.push({ ts: f.ts, html: entry(plat ? "arc" : "", plat ? "♛" : "✪", esc(f.p) + (plat ? " earns the Platinum: " : " earns a gold trophy: ") + esc(f.d.name),
+        plat ? "Every trophy in the hall, claimed. A true Legend of Ashenfall." : esc(f.d.desc), f.ts) });
+    });
+    (D.levelups || []).forEach(function(u){
+      var ts = t(u.t), m = u.level >= 99;
+      out.push({ ts: ts, html: entry(m ? "arc" : "", m ? "♛" : "▲", esc(u.who) + (m ? " masters " + esc(u.skill) + "!" : " reaches level " + u.level + " " + esc(u.skill)),
+        m ? "Level 99. The cape is earned." : "Another step on the road to 99.", ts) });
+    });
+    out.sort(function(a, b){ return b.ts - a.ts; });
+    var shown = chronOpen ? 80 : 10;
+    $("list-chron").innerHTML = out.length ? out.slice(0, shown).map(function(o){ return o.html; }).join("") +
+        (out.length > 10 ? '<div class="more"><button class="tab" id="chron-more">' + (chronOpen ? "Roll up the scroll" : "Unroll the full scroll (" + Math.min(out.length, 80) + ")") + '</button></div>' : "") :
+      sealed("✧", "The pages are empty", "Nothing has happened yet. Stories will appear here.");
+    var mb = $("chron-more"); if (mb) mb.onclick = function(){ chronOpen = !chronOpen; renderChronicle(M); };
+
+    var bosses = D.bosses || [];
+    $("list-bosses").innerHTML = bosses.length ? bosses.slice().sort(function(a, b){ return t(b.t) - t(a.t); }).map(function(b){
+      return entry("", "⚔", esc(b.name) + " is vanquished", b.by ? "Felled by " + esc(b.by) : "", t(b.t)); }).join("") :
+      sealed("⚔", "No bosses have been recorded", "The scribes are still learning how the world save records fallen bosses.",
+        "The world save tracks defeated bosses, but its format isn't decoded yet. That will be tuned after the first boss kill.");
+
+    var graves = D.graves || [];
+    $("list-graves").innerHTML = graves.length ? graves.slice().sort(function(a, b){ return t(b.t) - t(a.t); }).map(function(g){
+      return entry("bad", "✝", "Here lies " + esc(g.who), g.cause ? esc(g.cause) : "", t(g.t)); }).join("") :
+      sealed("✝", "The graveyard is quiet", "No gravestones have been recorded. Yet.",
+        "The world save keeps player gravestones. This list fills in once that part of the save is decoded.");
+  }
+
+  // ---------- charts ----------
+  var W = 1000;
+  function chartFrame(samples, H, yMax, yTicks, yFmt){
+    var t1 = D.updated, t0 = t1 - 7 * DAY, L = 46, R = 8, T = 8, Bm = 24;
+    function x(v){ return L + (v - t0) / (t1 - t0) * (W - L - R); }
+    function y(v){ return T + (1 - v / yMax) * (H - T - Bm); }
+    var g = "";
+    yTicks.forEach(function(v){ g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="rgba(138,100,36,.28)" stroke-width="1"/><text class="axis" x="' + (L - 8) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + yFmt(v) + '</text>'; });
+    for (var d = 0; d <= 7; d++) {
+      var dt = new Date(t1 - d * DAY); dt.setHours(0, 0, 0, 0); var xv = x(dt.getTime());
+      if (xv > L + 10 && xv < W - R - 10) g += '<text class="axis" x="' + xv + '" y="' + (H - 6) + '" text-anchor="middle">' + dt.toLocaleDateString(undefined, {weekday:"short"}) + '</text>';
+    }
+    // downtime bands
+    var gap = 25 * 60000;
+    samples.forEach(function(s, i){
+      if (s.up) return; var a = s.t, b = (samples[i + 1] ? samples[i + 1].t : s.t + 10 * 60000);
+      g += '<rect x="' + x(a) + '" y="' + T + '" width="' + Math.max(2, x(Math.min(b, a + gap)) - x(a)) + '" height="' + (H - T - Bm) + '" fill="rgba(255,128,72,.18)"/>';
+    });
+    return { x: x, y: y, g: g, L: L, R: R, T: T, Bm: Bm, H: H, t0: t0 };
+  }
+  function niceMax(v, step){ return Math.max(step, Math.ceil(v * 1.15 / step) * step); }
+  function renderRam(){
+    var S = (D.samples || []).filter(function(s){ return s.t >= D.updated - 7 * DAY; }).sort(function(a, b){ return a.t - b.t; });
+    var el = $("ram");
+    if (S.length < 2) { el.innerHTML = '<p class="cs">The chart fills in as the collector gathers readings (one every 10 minutes).</p>'; return; }
+    var maxRam = Math.max.apply(null, S.map(function(s){ return s.ram; }));
+    var top = niceMax(maxRam / 1024, 1), H = 190;
+    var ticks = []; var step = top <= 4 ? 1 : 2; for (var v = 0; v <= top; v += step) ticks.push(v * 1024);
+    var F = chartFrame(S, H, top * 1024, ticks, function(v){ return (v / 1024) + " GB"; });
+    var path = "", pen = false, prev = null;
+    S.forEach(function(s){
+      if (!s.up || (prev && s.t - prev.t > 25 * 60000)) pen = false;
+      if (s.up) { path += (pen ? "L" : "M") + F.x(s.t).toFixed(1) + " " + F.y(s.ram).toFixed(1); pen = true; }
+      prev = s;
+    });
+    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Server memory over the last 7 days">' + F.g +
+      '<path d="' + path + '" fill="none" stroke="#e8c26a" stroke-width="2" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px rgba(232,194,106,.6))"/>' +
+      '<line class="xh" x1="0" x2="0" y1="' + F.T + '" y2="' + (H - F.Bm) + '" stroke="rgba(255,242,198,.5)" stroke-width="1" visibility="hidden"/>' +
+      '<circle class="xd" r="4.5" fill="#fff2c6" stroke="#06090d" stroke-width="2" visibility="hidden"/>' +
+      '<rect class="hit" x="' + F.L + '" y="0" width="' + (W - F.L - F.R) + '" height="' + H + '" fill="transparent"/></svg>';
+    hover(el, S, F, function(s){ return s.up ? (s.ram / 1024).toFixed(2) + " GB in use" : "server down"; }, function(s){ return s.up ? F.y(s.ram) : null; });
+  }
+  function renderPop(){
+    var S = (D.samples || []).filter(function(s){ return s.t >= D.updated - 7 * DAY; }).sort(function(a, b){ return a.t - b.t; });
+    var el = $("pop");
+    if (S.length < 2) { el.innerHTML = '<p class="cs">The chart fills in as the collector gathers readings (one every 10 minutes).</p>'; return; }
+    var mx = (D.server && D.server.maxPlayers) || 6, H = 120;
+    var F = chartFrame(S, H, mx, [0, 2, 4, 6].filter(function(v){ return v <= mx; }), function(v){ return v; });
+    var area = "", base = F.y(0), open = false;
+    S.forEach(function(s, i){
+      var nx = S[i + 1] ? Math.min(S[i + 1].t, s.t + 25 * 60000) : s.t + 10 * 60000;
+      var n = s.up ? s.n : 0;
+      if (n > 0) area += "M" + F.x(s.t).toFixed(1) + " " + base + "V" + F.y(n).toFixed(1) + "H" + F.x(nx).toFixed(1) + "V" + base + "Z";
+    });
+    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Players online over the last 7 days">' + F.g +
+      '<path d="' + area + '" fill="rgba(232,194,106,.75)"/>' +
+      '<line class="xh" x1="0" x2="0" y1="' + F.T + '" y2="' + (H - F.Bm) + '" stroke="rgba(255,242,198,.5)" stroke-width="1" visibility="hidden"/>' +
+      '<circle class="xd" r="0" visibility="hidden"/>' +
+      '<rect class="hit" x="' + F.L + '" y="0" width="' + (W - F.L - F.R) + '" height="' + H + '" fill="transparent"/></svg>';
+    hover(el, S, F, function(s){ return s.up ? s.n + " of " + mx + " online" : "server down"; }, function(){ return null; });
+  }
+  function hover(el, S, F, label, yOf){
+    var svg = el.querySelector("svg"), xh = svg.querySelector(".xh"), xd = svg.querySelector(".xd"), hit = svg.querySelector(".hit");
+    function move(ev){
+      var r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W;
+      var tv = F.t0 + (px - F.L) / (W - F.L - F.R) * (D.updated - F.t0);
+      var best = S[0]; S.forEach(function(s){ if (Math.abs(s.t - tv) < Math.abs(best.t - tv)) best = s; });
+      var X = F.x(best.t); xh.setAttribute("x1", X); xh.setAttribute("x2", X); xh.setAttribute("visibility", "visible");
+      var yy = yOf(best); if (yy != null) { xd.setAttribute("cx", X); xd.setAttribute("cy", yy); xd.setAttribute("visibility", "visible"); } else xd.setAttribute("visibility", "hidden");
+      showTip("<b>" + when(best.t) + "</b>" + label(best), ev.clientX, ev.clientY);
+    }
+    hit.addEventListener("pointermove", move);
+    hit.addEventListener("pointerleave", function(){ xh.setAttribute("visibility", "hidden"); xd.setAttribute("visibility", "hidden"); hideTip(); });
+  }
+
+  function renderHealth(M){
+    var S = (D.samples || []).filter(function(s){ return s.t >= D.updated - 7 * DAY; });
+    var upPct = S.length ? Math.round(S.filter(function(s){ return s.up; }).length / S.length * 1000) / 10 : null;
+    var ev = D.events || [];
+    var crashes = ev.filter(function(e){ return e.kind === "crash"; });
+    var last = crashes.length ? t(crashes[crashes.length - 1].t) : null;
+    var first = ev.length ? t(ev[0].t) : D.updated;
+    var since = Math.floor((D.updated - (last || first)) / DAY);
+    var starts = ev.filter(function(e){ return e.kind === "start"; }).length;
+    $("health").innerHTML =
+      tile(upPct == null ? "–" : upPct + "<small>%</small>", "Uptime", "of the last 7 days") +
+      tile(since, "Days without a crash", last ? "last fell " + day(last) : "never fallen") +
+      tile(crashes.length, "Unclean stops", "all time", crashes.length ? "warn" : "") +
+      tile(D.server && D.server.online ? (D.server.ramMB / 1024).toFixed(1) + "<small>GB</small>" : "–", "Memory now", "build " + esc((D.server && D.server.build) || "?") + " · " + starts + " boots");
+    renderRam(); renderPop();
+  }
+
+  function renderVault(){
+    var B = D.backups || { count: 0, list: [] }, sv = D.saves || {};
+    var latest = B.list && B.list[0];
+    $("vault-tiles").innerHTML =
+      tile(B.count + "<small>/" + (B.keep || 48) + "</small>", "Backups kept", "oldest pruned automatically") +
+      tile(latest ? ago(t(latest.t)).replace(" ago", "") : "–", "Since last backup", latest ? when(t(latest.t)) : "none yet") +
+      tile((B.totalMB || 0) + "<small>MB</small>", "Vault size", "every copy combined") +
+      tile((sv.count || 0).toLocaleString(), "World saves", sv.last ? "last " + ago(t(sv.last)) + " · " + (sv.worldKB || 0).toLocaleString() + " KB" : "");
+    var list = (B.list || []).slice(0, 16);
+    $("vault").innerHTML = list.length ? list.map(function(b, i){
+      return '<span class="chest' + (i ? "" : " first") + '">' + when(t(b.t)) + ' · <b>' + (b.kb >= 1024 ? (b.kb / 1024).toFixed(1) + " MB" : b.kb + " KB") + '</b></span>'; }).join("") :
+      '<span class="cs" style="color:var(--faint);font-style:italic">No backups yet. The watchdog takes one every time the server starts and stops.</span>';
+  }
+
+  // ---------- tooltip ----------
+  var tip = $("tip");
+  function showTip(html, x, y){
+    tip.innerHTML = html; tip.style.opacity = 1;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)) + "px";
+    tip.style.top = (y - h - 12 < 8 ? y + 18 : y - h - 12) + "px";
+  }
+  function hideTip(){ tip.style.opacity = 0; }
+  document.addEventListener("pointerover", function(e){ var el = e.target.closest && e.target.closest("[data-tip]"); if (el) showTip(el.getAttribute("data-tip"), e.clientX, e.clientY); });
+  document.addEventListener("pointermove", function(e){ var el = e.target.closest && e.target.closest("[data-tip]"); if (el) showTip(el.getAttribute("data-tip"), e.clientX, e.clientY); else if (!(e.target.classList && e.target.classList.contains("hit"))) hideTip(); });
+
+  // ---------- tabs ----------
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function(b){
+    b.addEventListener("click", function(){
+      document.querySelectorAll(".tab").forEach(function(x){ x.setAttribute("aria-selected", x === b ? "true" : "false"); });
+      document.querySelectorAll(".panel").forEach(function(p){ p.classList.toggle("on", p.id === "p-" + b.dataset.p); });
+    });
+  });
+
+  // ---------- trophy hall ----------
+  var TDEF = null, tSel = null, tShow = "all", tCat = "all", tOpen = false;
+  var TIERS = ["platinum","gold","silver","bronze"];
+  fetch("trophies.json", { cache: "no-store" }).then(function(r){ return r.json(); }).then(function(j){ TDEF = j; if (D) { renderTrophies(); renderChronicle(model()); } }).catch(function(){});
+  function cup(tier){
+    var f = 'url(#tg-' + tier + ')';
+    return '<svg viewBox="0 0 40 40" aria-hidden="true">' +
+      '<path d="M12 8 H7.5 C7.5 14 9.5 16.5 13 16.5 M28 8 H32.5 C32.5 14 30.5 16.5 27 16.5" fill="none" stroke="' + f + '" stroke-width="2.2" stroke-linecap="round"/>' +
+      '<path fill="' + f + '" d="M11.5 5 H28.5 V13.5 C28.5 19.5 25 23 20 23 C15 23 11.5 19.5 11.5 13.5 Z M18 22.5 h4 v5.5 h-4 Z M14.5 28 H25.5 L26.5 32 H13.5 Z M11.5 32 h17 v3.5 h-17 Z"/>' +
+      (tier === "platinum" ? '<path d="M33 2 l1.2 3 3 1.2 -3 1.2 -1.2 3 -1.2 -3 -3 -1.2 3 -1.2z" fill="#fff"/>' : "") + '</svg>';
+  }
+  function tFmt(v, unit){ v = +v || 0; return unit === "h" ? (v < 10 ? v.toFixed(1) : Math.round(v)) + "h" : Math.floor(v).toLocaleString(); }
+  function trophyUnlocks(){  // [{p, d, ts}] newest first
+    var out = []; if (!TDEF) return out;
+    (D.trophies || []).forEach(function(p){ TDEF.trophies.forEach(function(d){ if (p.earned && p.earned[d.id]) out.push({ p: p.name, d: d, ts: t(p.earned[d.id]) }); }); });
+    return out.sort(function(a, b){ return b.ts - a.ts || TIERS.indexOf(a.d.tier) - TIERS.indexOf(b.d.tier); });
+  }
+  function renderTrophies(){
+    if (!TDEF || !D) return;
+    var players = (D.trophies || []).filter(function(p){ return p && p.name; });
+    if (!players.length) {
+      $("hunters").innerHTML = '<div class="frame" style="grid-column:1/-1"><span class="gem"></span>' + sealed("✦", "The cabinet stands empty", "Trophies are awarded as adventurers play. The first comes the moment someone joins.") + '</div>';
+      $("recent").innerHTML = $("tfilters").innerHTML = $("trophies").innerHTML = $("tmore").innerHTML = ""; return;
+    }
+    var defs = TDEF.trophies, pts = TDEF.points, N = players.length;
+    var nonPlat = defs.filter(function(d){ return d.stat !== "allTrophies"; }).length;
+    var rare = {}; defs.forEach(function(d){ rare[d.id] = players.filter(function(p){ return p.earned && p.earned[d.id]; }).length; });
+    function score(p){ var s = 0, c = {platinum:0,gold:0,silver:0,bronze:0}, n = 0;
+      defs.forEach(function(d){ if (p.earned && p.earned[d.id]) { s += pts[d.tier]; c[d.tier]++; n++; } }); return { pts: s, c: c, n: n }; }
+    players.sort(function(a, b){ return score(b).pts - score(a).pts; });
+    if (!tSel || !players.some(function(p){ return p.name === tSel; })) tSel = players[0].name;
+
+    $("hunters").innerHTML = players.map(function(p){
+      var s = score(p);
+      return '<button class="frame hunter" aria-pressed="' + (p.name === tSel) + '" data-h="' + esc(p.name) + '"><span class="gem"></span>' +
+        '<div class="hn">' + esc(p.name) + '<small>' + s.pts.toLocaleString() + ' pts</small></div>' +
+        '<div class="tally">' + TIERS.map(function(tr){ return '<span data-tip="<b>' + tr[0].toUpperCase() + tr.slice(1) + '</b>' + s.c[tr] + ' earned">' + cup(tr) + s.c[tr] + '</span>'; }).join("") + '</div>' +
+        '<div class="pbar"><i style="width:' + (s.n / defs.length * 100) + '%"></i></div><div class="pct">' + s.n + ' of ' + defs.length + ' trophies · ' + Math.floor(s.n / defs.length * 100) + '%</div></button>';
+    }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll(".hunter"), function(b){ b.onclick = function(){ tSel = b.getAttribute("data-h"); tOpen = false; renderTrophies(); }; });
+
+    $("recent").innerHTML = trophyUnlocks().slice(0, 6).map(function(f){
+      return '<span class="chip">' + cup(f.d.tier) + '<span><b>' + esc(f.p) + '</b> earned <b>' + (f.d.hidden ? esc(f.d.name) : esc(f.d.name)) + '</b> · ' + ago(f.ts) + '</span></span>'; }).join("");
+
+    var me = players.filter(function(p){ return p.name === tSel; })[0], st = me.stats || {}, got = me.earned || {};
+    var cats = TDEF.cats;
+    function chip(group, val, label, cur){ return '<button class="tab" aria-selected="' + (val === cur) + '" data-g="' + group + '" data-v="' + val + '">' + label + '</button>'; }
+    $("tfilters").innerHTML = chip("show", "all", "All", tShow) + chip("show", "got", "Earned", tShow) + chip("show", "locked", "Locked", tShow) + '<span class="gap"></span>' +
+      chip("cat", "all", "Every kind", tCat) + Object.keys(cats).map(function(k){ return chip("cat", k, cats[k], tCat); }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll("#tfilters .tab"), function(b){ b.onclick = function(){
+      if (b.dataset.g === "show") tShow = b.dataset.v; else tCat = b.dataset.v; tOpen = false; renderTrophies(); }; });
+
+    var list = defs.filter(function(d){
+      var g = !!got[d.id];
+      return (tShow === "all" || (tShow === "got") === g) && (tCat === "all" || d.cat === tCat);
+    });
+    var shown = tOpen ? list : list.slice(0, 24);
+    $("trophies").innerHTML = shown.length ? shown.map(function(d){
+      var g = !!got[d.id], hid = d.hidden && !g, r = rare[d.id];
+      var v = d.stat === "allTrophies" ? defs.filter(function(x){ return x.stat !== "allTrophies" && got[x.id]; }).length : st[d.stat];
+      var target = d.stat === "allTrophies" ? nonPlat : d.min;
+      var bar = (!g && !hid && v != null && target > 1) ? '<div class="pbar"><i style="width:' + Math.min(100, v / target * 100) + '%"></i></div><div class="pv">' + tFmt(v, d.unit) + ' / ' + tFmt(target, d.unit) + '</div>' : "";
+      var rl = r / N, rlab = rl <= .1 ? "Ultra rare" : rl <= .25 ? "Very rare" : rl <= .5 ? "Rare" : "Common";
+      return '<div class="tro ' + d.tier + (g ? " got" : "") + '">' + cup(hid ? "bronze" : d.tier) +
+        '<div><div class="tn">' + (hid ? "Hidden Trophy" : esc(d.name)) + '</div><div class="td">' + (hid ? "Keep adventuring to reveal this one." : esc(d.desc)) + '</div>' +
+        '<div class="tm"><span class="tier ' + d.tier + '">' + (hid ? "???" : d.tier) + '</span><span data-tip="<b>' + rlab + '</b>Earned by ' + r + ' of ' + N + ' adventurers">' + rlab + ' · ' + r + '/' + N + '</span>' +
+        (g ? '<span class="when">✓ ' + day(t(got[d.id])) + '</span>' : '') + '</div>' + bar + '</div></div>';
+    }).join("") : '<p style="color:var(--faint);font-style:italic">Nothing here with these filters.</p>';
+    $("tmore").innerHTML = list.length > 24 ? '<button class="tab" id="tmore-b">' + (tOpen ? "Show fewer" : "Show all " + list.length) + '</button>' : "";
+    var mb = $("tmore-b"); if (mb) mb.onclick = function(){ tOpen = !tOpen; renderTrophies(); };
+  }
+
+  // ---------- main ----------
+  function renderAll(){
+    if (!D) return;
+    var M = model();
+    renderLive(); renderLedger(M); renderAwards(M); renderRoster(M); renderHeat(M); renderSkills(); renderTrophies(); renderChronicle(M); renderHealth(M); renderVault();
+  }
+  function refresh(){
+    fetch(SRC + "?t=" + Date.now(), { cache: "no-store" })
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function(j){ D = j; renderAll(); })
+      .catch(function(){ if (!D) { $("status").className = "pill lost"; $("status-txt").textContent = "The scribes are silent"; } });
+  }
+  refresh(); setInterval(refresh, REFRESH);
+  setInterval(function(){ if (D) renderLive(); }, 30000);
+
+  // ---------- golden motes ----------
+  var cv = $("motes"), cx = cv.getContext("2d"), motes = [], still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function size(){ var r = window.devicePixelRatio || 1; cv.width = innerWidth * r; cv.height = innerHeight * r; cx.setTransform(r, 0, 0, r, 0, 0); }
+  function spawn(init){
+    return { x: Math.random() * innerWidth, y: init ? Math.random() * innerHeight : innerHeight + 10,
+      r: Math.random() * 1.6 + .4, vy: -(Math.random() * .35 + .08), vx: (Math.random() - .5) * .15,
+      ph: Math.random() * 6.28, sp: Math.random() * .03 + .01, star: Math.random() < .12 };
+  }
+  function draw(){
+    cx.clearRect(0, 0, innerWidth, innerHeight);
+    motes.forEach(function(m){
+      if (!still) { m.y += m.vy; m.x += m.vx + Math.sin(m.ph) * .12; m.ph += m.sp; if (m.y < -10) Object.assign(m, spawn(false)); }
+      var a = .35 + .65 * Math.abs(Math.sin(m.ph));
+      var gr = cx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r * 5);
+      gr.addColorStop(0, "rgba(255,240,190," + (a * .9) + ")"); gr.addColorStop(.35, "rgba(232,194,106," + (a * .35) + ")"); gr.addColorStop(1, "rgba(232,194,106,0)");
+      cx.fillStyle = gr; cx.beginPath(); cx.arc(m.x, m.y, m.r * 5, 0, 6.283); cx.fill();
+      if (m.star && a > .8) {
+        var L = m.r * 7 * a; cx.strokeStyle = "rgba(255,246,214," + (a - .5) + ")"; cx.lineWidth = .8;
+        cx.beginPath(); cx.moveTo(m.x - L, m.y); cx.lineTo(m.x + L, m.y); cx.moveTo(m.x, m.y - L); cx.lineTo(m.x, m.y + L); cx.stroke();
+      }
+    });
+    if (!still) requestAnimationFrame(draw);
+  }
+  size(); addEventListener("resize", function(){ size(); if (still) draw(); });
+  for (var i = 0; i < Math.min(90, Math.round(innerWidth / 14)); i++) motes.push(spawn(true));
+  draw();
+})();
+</script>
+</body>
+</html>

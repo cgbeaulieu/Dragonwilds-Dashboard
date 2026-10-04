@@ -1,0 +1,7 @@
+# Local-only state and tuning dumps - never commit these
+collector/config.ps1
+collector/state.json
+collector/unparsed.log
+collector/save-baseline.txt
+collector/save-strings.txt
+collector/last-push.txt
