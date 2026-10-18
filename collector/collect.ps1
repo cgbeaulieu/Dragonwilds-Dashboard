@@ -247,7 +247,17 @@ function Load-State {
   $old = if (Test-Path $StateFile) { Get-Content $StateFile -Raw | ConvertFrom-Json } else { $null }
   return @{ events=(AsList $null); logs=@{}; saves=@{}; ids=(ToHash $old.ids); levels=(ToHash $old.levels); chars=(ToHash $old.chars); charOf=(ToHash $old.charOf); trophies=(ToHash $old.trophies); samples=(AsList $old.samples); unknown=(AsList $null) }
 }
+# Xbox/PSN logins carry a "#1234" suffix that the join line omits ("soopa#5106" vs "soopa"),
+# and account IDs vary in letter case between lines. Normalise both.
+function Clean-Name([string]$n) { return ($n -replace '#\d+$', '').Trim() }
 $state = Load-State
+if ([int]$state.v -lt 2) {   # one-time repair of history saved before the fix above
+  foreach ($e in $state.events) { if ($e.who) { $e.who = Clean-Name $e.who } }
+  $fixed = @{}; foreach ($k in @($state.ids.Keys)) { $fixed[$k.ToUpper()] = Clean-Name $state.ids[$k] }; $state.ids = $fixed
+  $fixed = @{}; foreach ($k in @($state.charOf.Keys)) { $fixed[(Clean-Name $k)] = $state.charOf[$k] }; $state.charOf = $fixed
+  $state.logs = @{}   # re-read rotated logs still on disk (events are de-duplicated)
+}
+$state.v = 2
 $keys = New-Object 'System.Collections.Generic.HashSet[string]'
 foreach ($e in $state.events) { [void]$keys.Add(("{0}|{1}|{2}|{3}" -f $e.t, $e.kind, $e.who, $e.note)) }
 $unknownSeen = New-Object 'System.Collections.Generic.HashSet[string]'
@@ -303,22 +313,22 @@ function Parse-Log([string]$path) {
     if ($cat -eq "LogWorld" -and $msg.StartsWith("Bringing World /Game/Maps/World/")) { $r.world = $true; continue }
     if ($msg.Contains("Setting player info to Account[")) {
       $x = $rxChar.Match($msg)
-      if ($x.Success) { $login = $state.ids["RedpointEOS:" + $x.Groups[1].Value]; if ($login) { $state.charOf[$login] = $x.Groups[2].Value } }
+      if ($x.Success) { $login = $state.ids[("RedpointEOS:" + $x.Groups[1].Value).ToUpper()]; if ($login) { $state.charOf[$login] = $x.Groups[2].Value } }
       continue
     }
 
     if ($cat -eq "LogNet") {
       $x = $rxLogin.Match($msg)
       if ($x.Success) {
-        $name = [uri]::UnescapeDataString($x.Groups[1].Value).Trim()
-        $state.ids[$x.Groups[2].Value] = $name
+        $name = Clean-Name ([uri]::UnescapeDataString($x.Groups[1].Value))
+        $state.ids[$x.Groups[2].Value.ToUpper()] = $name
         continue
       }
       $x = $rxJoin.Match($msg)
       if ($x.Success) { [void]$r.items.Add(@{ t=$t; kind="join"; who=$x.Groups[1].Value }); continue }
       $x = $rxClose.Match($msg)
       if ($x.Success) {
-        $id = $x.Groups[1].Value
+        $id = $x.Groups[1].Value.ToUpper()
         if ($state.ids.ContainsKey($id)) { [void]$r.items.Add(@{ t=$t; kind="leave"; who=$state.ids[$id] }) }
         continue
       }
@@ -543,6 +553,7 @@ if (Test-Path $Backups) {
 
 # ---- persist state ----
 [ordered]@{
+  v=2
   events=@($state.events); logs=$state.logs; saves=$state.saves; ids=$state.ids; levels=$state.levels; chars=$state.chars; charOf=$state.charOf; trophies=$state.trophies
   samples=@($state.samples); unknown=@($state.unknown)
 } | ConvertTo-Json -Depth 8 -Compress | Set-Content $StateFile -Encoding utf8
