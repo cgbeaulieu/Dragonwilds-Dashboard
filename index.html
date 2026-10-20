@@ -578,6 +578,10 @@ footer .dia{display:inline-block;width:6px;height:6px;transform:rotate(45deg);ba
       out.push({ ts: ts, html: entry(m ? "arc" : "", m ? "♛" : "▲", esc(u.who) + (m ? " masters " + esc(u.skill) + "!" : " reaches level " + u.level + " " + esc(u.skill)),
         m ? "Level 99. The cape is earned." : "Another step on the road to 99.", ts) });
     });
+    (D.graves || []).forEach(function(g){
+      var ts = t(g.t);
+      out.push({ ts: ts, html: entry("bad", "✝", esc(g.who) + " has fallen", g.cause ? esc(g.cause) + ". A gravestone marks the spot." : "A gravestone marks the spot.", ts) });
+    });
     out.sort(function(a, b){ return b.ts - a.ts; });
     var shown = chronOpen ? 80 : 10;
     $("list-chron").innerHTML = out.length ? out.slice(0, shown).map(function(o){ return o.html; }).join("") +
@@ -593,9 +597,9 @@ footer .dia{display:inline-block;width:6px;height:6px;transform:rotate(45deg);ba
 
     var graves = D.graves || [];
     $("list-graves").innerHTML = graves.length ? graves.slice().sort(function(a, b){ return t(b.t) - t(a.t); }).map(function(g){
-      return entry("bad", "✝", "Here lies " + esc(g.who), g.cause ? esc(g.cause) : "", t(g.t)); }).join("") :
+      return entry("bad", "✝", "Here lies " + esc(g.who), g.cause ? esc(g.cause) : "Fell to unknown causes.", t(g.t)); }).join("") :
       sealed("✝", "The graveyard is quiet", "No gravestones have been recorded. Yet.",
-        "The world save keeps player gravestones. This list fills in once that part of the save is decoded.");
+        "Every death on the server raises a gravestone. Each one is listed here.");
   }
 
   // ---------- charts ----------

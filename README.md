@@ -18,7 +18,8 @@ way: a collector on the server PC, a `data.json` pushed to GitHub, and a page on
 | Skills of the Realm + Deeds | every character's JSON inside the world `.sav`: skill XP → levels, recipes, unique foes slain, landmarks, quests, spells, journal, playtime |
 | Grand Sage / Slayer honours, level-up milestones in the Chronicle | same character data (milestones every 10 levels and at 99) |
 | Trophy Hall: 100 trophies (56 bronze, 34 silver, 9 gold, 1 platinum), points, rarity, hidden trophies | `trophies.json` definitions, evaluated by the collector from sessions + character stats; unlocks are permanent and time-stamped in `state.json` |
-| Bosses Felled, Gravestones | **sealed for now**, see below |
+| Gravestones | server log (deaths, with the killer) |
+| Bosses Felled | **sealed for now**, see below |
 
 ## Trophies
 
@@ -95,8 +96,14 @@ Joins, leaves and characters were verified against a real session (Soop, 2026-10
   Skills are listed by internal ID. The ID→name map and the XP table come from the community save
   editors (e.g. [OogaBoogaCode/RSDWSaveEditor](https://github.com/OogaBoogaCode/RSDWSaveEditor)). If a
   game patch adds a skill, add its ID to `$SkillIds` in `collect.ps1`.
-- **Bosses and gravestones (not yet).** The world save has `DefeatedBossesInternalNames` and a
-  `PlayerGraveyard`, but these are in Jagex's binary property format, not JSON. On its first run the
+- **Gravestones (working, from the log).** There is no "X died" line. A death shows up as the
+  player's pawn respawning (`TeleportTo() : [BP_PlayerCharacter_C_<id>]`) and, in the same frame,
+  a `BP_PlayerGravestone_C` spawn and/or the held gear dropping (`CurrentHoldable: … -> nullptr`).
+  The pawn is named by the `PlayerChar entered world … Character Name[…]` line before it is
+  possessed, and the killer is the last `PredictPointDamage` hit in the 60 s before. Friendly
+  names for foes live in `$FoeNames`.
+- **Bosses (not yet).** The world save has `DefeatedBossesInternalNames` (and a
+  `PlayerGraveyard`), but these are in Jagex's binary property format, not JSON. On its first run the
   collector snapshots the fresh world's readable strings (`collectorsave-baseline.txt`). Each later
   run writes the strings that are **new** since then to `collectorsave-strings.txt`. After a boss
   kill or a death, that file shows what to wire up. Any death-looking log lines also land in

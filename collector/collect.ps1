@@ -270,13 +270,27 @@ function Add-Event([string]$t, [string]$kind, [string]$who, [string]$note) {
 
 # ================= log parsing =================
 # UE line:  [2026.10.04-01.08.03:946][  0]LogNet: Join succeeded: Soop     (timestamps are UTC)
-$rxLine  = [regex]'^\[(\d{4})\.(\d\d)\.(\d\d)-(\d\d)\.(\d\d)\.(\d\d):(\d{3})\]\[\s*\d+\]([\w]+):\s?(.*)$'
+$rxLine  = [regex]'^\[(\d{4})\.(\d\d)\.(\d\d)-(\d\d)\.(\d\d)\.(\d\d):(\d{3})\]\[\s*(\d+)\]([\w]+):\s?(.*)$'
 $rxLogin = [regex]'Login request:.*?[?&]Name=([^?&]+?)(?:\?|&|\s|$).*?userId:\s*(\S+)'
 $rxJoin  = [regex]'^Join succeeded:\s*(.+?)\s*$'
 $rxClose = [regex]'(?:UNetConnection::Close|UChannel::CleanUp|Connection closed|CleanUp).*?UniqueId:\s*([^,\s]+)'
 $rxLeft  = [regex]'(?i)\bplayer\s+(?:name\s*[:=]\s*)?["'']?(.+?)["'']?\s+(?:has\s+)?(?:left|disconnected|logged out)\b'
 $rxBuild = [regex]'^Build:\s*\S*?CL-(\d+)'
 $rxChar  = [regex]'Account\[XP:([0-9A-Fa-f]+)\] Character Name\[(.+?)\] Guid'
+# Deaths. The log has no "X died" line, but a death respawn is a TeleportTo() of the player's
+# pawn that, in the same frame, spawns a BP_PlayerGravestone_C and/or drops the held gear.
+# Pawns are named by the "PlayerChar entered world" line just before they are possessed.
+$rxEnter = [regex]'^PlayerChar entered world \[.*Character Name\[(.+?)\] Guid'
+$rxPoss  = [regex]'^Character \[(BP_PlayerCharacter_C_\d+)\] possessed by controller'
+$rxTp    = [regex]'TeleportTo\(\) : \[(BP_PlayerCharacter_C_\d+)\] Teleporting to'
+$rxHit   = [regex]'PredictPointDamage\(\) : \[[^\]]+\] (BP_PlayerCharacter_C_\d+) will receive ([\d.]+) damage at [\d.]+ from (\S+?)\.?$'
+$rxGrave = [regex]'teleport spot \[X=([-\d.]+) Y=([-\d.]+) Z=([-\d.]+)\] for \[BP_PlayerGravestone_C\]'
+$FoeNames = @{ "RangedGoblin_Poison"="Poison Goblin Archer"; "RangedGoblin"="Goblin Archer"; "SentryGoblin"="Goblin Sentry"; "Trap_Fireball_Agility"="Fireball Trap" }
+function Foe-Name([string]$actor) {
+  $n = $actor -replace '^BP_(AI_)?', '' -replace '(_Character)?_C(_\w+)?$', ''
+  if ($FoeNames.ContainsKey($n)) { return $FoeNames[$n] }
+  return (($n -replace '_', ' ') -creplace '(?<=[a-z])(?=[A-Z])', ' ').Trim()
+}
 # Lines worth a human look when tuning (logged once to unparsed.log)
 $rxMaybe = [regex]'(?i)(PostLogin|Logout|joined|left the|disconnect|kicked|banned|died|killed|defeated|gravestone)'
 $rxNoise = [regex]'(?i)(LogRedpointEOS|LogEOS|LogJournal|SESSION|Telemetry|LogPluginManager|LogConfig|LogStreaming|LogInit)'
@@ -293,6 +307,7 @@ function Read-Lines([string]$path) {
 
 function Parse-Log([string]$path) {
   $r = @{ first=$null; last=$null; build=""; saves=0; clean=$false; fatal=$false; world=$false; items=(New-Object System.Collections.ArrayList) }
+  $pawn = @{}; $entering = $null; $lastHit = @{}; $tp = $null
   foreach ($line in (Read-Lines $path)) {
     if ($line.StartsWith("LogInit: Build:")) {   # boot header lines carry no timestamp
       $b = $rxBuild.Match($line.Substring(9)); if ($b.Success) { $r.build = $b.Groups[1].Value }; continue
@@ -304,7 +319,38 @@ function Parse-Log([string]$path) {
     $t = "{0}-{1}-{2}T{3}:{4}:{5}.{6}Z" -f $g[1].Value,$g[2].Value,$g[3].Value,$g[4].Value,$g[5].Value,$g[6].Value,$g[7].Value
     if (-not $r.first) { $r.first = $t }
     $r.last = $t
-    $cat = $g[8].Value; $msg = $g[9].Value
+    $frame = $g[8].Value; $cat = $g[9].Value; $msg = $g[10].Value
+
+    # ---- deaths: close out a pending respawn once its frame has passed ----
+    if ($tp) {
+      if ($frame -ne $tp.frame) {
+        if ($tp.dead -and $tp.who) { [void]$r.items.Add(@{ t=$tp.t; kind="death"; who=$tp.who; note=$tp.note }) }
+        $tp = $null
+      } elseif ($msg.Contains("BP_PlayerGravestone_C")) {
+        $x = $rxGrave.Match($msg); if ($x.Success) { $tp.dead = $true; $tp.note += "|{0:F0},{1:F0}" -f [double]$x.Groups[1].Value, [double]$x.Groups[2].Value }
+        continue
+      } elseif ($msg.Contains("CurrentHoldable:") -and $msg.EndsWith("-> nullptr.")) { $tp.dead = $true; continue }
+    }
+    if ($cat -eq "LogDominionPlayerControllerBase" -and $msg.StartsWith("PlayerChar entered world")) {
+      $x = $rxEnter.Match($msg); if ($x.Success) { $entering = $x.Groups[1].Value }
+    }
+    if ($cat -eq "LogDominionPlayerCharacter") {
+      $x = $rxPoss.Match($msg); if ($x.Success -and $entering) { $pawn[$x.Groups[1].Value] = $entering; $entering = $null; continue }
+      $x = $rxTp.Match($msg)
+      if ($x.Success) {
+        $id = $x.Groups[1].Value; $by = ""; $h = $lastHit[$id]
+        if ($h -and ([datetime]$t - [datetime]$h.t).TotalSeconds -le 60) {
+          $by = if ($h.from -like "BP_PlayerCharacter_C_*") { if ($h.from -eq $id -or -not $pawn[$h.from]) { "" } else { "@" + $pawn[$h.from] } } else { Foe-Name $h.from }
+        }
+        $lastHit.Remove($id)
+        $tp = @{ t=$t; frame=$frame; who=$pawn[$id]; dead=$false; note=$by }
+        continue
+      }
+    }
+    if ($cat -eq "EvadeAttack" -and $msg.Contains("will receive")) {
+      $x = $rxHit.Match($msg); if ($x.Success -and [double]$x.Groups[2].Value -gt 0) { $lastHit[$x.Groups[1].Value] = @{ t=$t; from=$x.Groups[3].Value } }
+      continue
+    }
 
     if ($cat -eq "LogPersistence" -and $msg.Contains("Save completed SUCCESSFULLY")) { $r.saves++; continue }
     if ($cat -eq "LogCore" -and $msg.Contains("Engine exit requested")) { $r.clean = $true; continue }
@@ -373,7 +419,7 @@ foreach ($f in $logFiles) {
   if (-not $p.world) { if (-not $isLive) { $state.logs[$sig] = $true }; continue }   # aborted launch (e.g. a 2nd copy that quit)
   $runKey = $p.first
   Add-Event $p.first "start" "" $p.build
-  foreach ($i in $p.items) { Add-Event $i.t $i.kind $i.who "" }
+  foreach ($i in $p.items) { Add-Event $i.t $i.kind $i.who ([string]$i.note) }
   if ($p.saves -gt 0) { $state.saves[$runKey] = @{ n=$p.saves; last=$p.last } }
   if ($p.build) { $build = $p.build }
   # A run is over if its log was rotated, or it's the live log and the server isn't running.
@@ -579,7 +625,7 @@ $data = [ordered]@{
   trophies = @($trophyPlayers)
   levelups = @($state.events | Where-Object { $_.kind -eq "level" } | ForEach-Object { $p = ([string]$_.note).Split("|"); [ordered]@{ t=$_.t; who=$_.who; skill=$p[0]; level=[int]$p[1] } })
   bosses   = @()
-  graves   = @()
+  graves   = @($state.events | Where-Object { $_.kind -eq "death" } | ForEach-Object { $by = ([string]$_.note).Split("|")[0]; [ordered]@{ t=$_.t; who=$_.who; by=($by -replace '^@', ''); cause=$(if ($by.StartsWith("@")) { "Slain by " + $by.Substring(1) } elseif ($by) { "Slain by " + $(if ($by -match '^[AEIOU]') { "an " } else { "a " }) + $by } else { "" }) } })
 }
 $data | ConvertTo-Json -Depth 8 -Compress | Set-Content $DataFile -Encoding utf8
 Write-Host ("Wrote {0}  (server: {1}, online: {2}, sessions: {3}, events: {4}, backups: {5})" -f `
