@@ -258,7 +258,16 @@ if ([int]$state.v -lt 2) {   # one-time repair of history saved before the fix a
   $state.logs = @{}   # re-read rotated logs still on disk (events are de-duplicated)
 }
 $state.v = 2
-$keys = New-Object 'System.Collections.Generic.HashSet[string]'
+# Repair leaves recorded before login names could contain spaces ("Prof. Merlyn" was cut to
+# "Prof.", so his leaves never closed his sessions). Safe to run every time.
+$joinNames = @($state.events | Where-Object { $_.kind -eq "join" } | ForEach-Object { $_.who } | Select-Object -Unique)
+foreach ($e in $state.events) {
+  if ($e.kind -ne "leave" -or -not $e.who -or $joinNames -contains $e.who) { continue }
+  $full = @($joinNames | Where-Object { $_.StartsWith($e.who + " ") })
+  if ($full.Count -eq 1) { $e.who = $full[0] }
+}
+foreach ($k in @($state.ids.Keys)) { $full = @($joinNames | Where-Object { $_.StartsWith($state.ids[$k] + " ") }); if ($full.Count -eq 1 -and $joinNames -notcontains $state.ids[$k]) { $state.ids[$k] = $full[0] } }
+$keys =New-Object 'System.Collections.Generic.HashSet[string]'
 foreach ($e in $state.events) { [void]$keys.Add(("{0}|{1}|{2}|{3}" -f $e.t, $e.kind, $e.who, $e.note)) }
 $unknownSeen = New-Object 'System.Collections.Generic.HashSet[string]'
 foreach ($u in $state.unknown) { [void]$unknownSeen.Add([string]$u) }
@@ -271,7 +280,7 @@ function Add-Event([string]$t, [string]$kind, [string]$who, [string]$note) {
 # ================= log parsing =================
 # UE line:  [2026.10.04-01.08.03:946][  0]LogNet: Join succeeded: Soop     (timestamps are UTC)
 $rxLine  = [regex]'^\[(\d{4})\.(\d\d)\.(\d\d)-(\d\d)\.(\d\d)\.(\d\d):(\d{3})\]\[\s*(\d+)\]([\w]+):\s?(.*)$'
-$rxLogin = [regex]'Login request:.*?[?&]Name=([^?&]+?)(?:\?|&|\s|$).*?userId:\s*(\S+)'
+$rxLogin = [regex]'Login request:.*?[?&]Name=([^?&]+?)(?=\?|&|\s+userId:|$).*?userId:\s*(\S+)'
 $rxJoin  = [regex]'^Join succeeded:\s*(.+?)\s*$'
 $rxClose = [regex]'(?:UNetConnection::Close|UChannel::CleanUp|Connection closed|CleanUp).*?UniqueId:\s*([^,\s]+)'
 $rxLeft  = [regex]'(?i)\bplayer\s+(?:name\s*[:=]\s*)?["'']?(.+?)["'']?\s+(?:has\s+)?(?:left|disconnected|logged out)\b'
