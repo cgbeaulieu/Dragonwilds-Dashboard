@@ -52,6 +52,9 @@ $SaveDir  = Join-Path $Game "Saved\SaveGames"
 $Backups  = Join-Path $Config.ServerRoot "Backups"
 $ProcName = "RSDragonwildsServer-Win64-Shipping"
 $KeepSamplesDays = 7
+# A live server logs every few seconds even when empty (longest quiet gap seen: ~50 s).
+# If the live log's newest line is older than this, the process is hung: count it as down.
+$StallMinutes = 10
 
 function Iso([datetime]$d) { $d.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ") }
 function UnixMs([datetime]$d) { [DateTimeOffset]::new($d.ToUniversalTime()).ToUnixTimeMilliseconds() }
@@ -431,6 +434,12 @@ foreach ($f in $logFiles) {
   foreach ($i in $p.items) { Add-Event $i.t $i.kind $i.who ([string]$i.note) }
   if ($p.saves -gt 0) { $state.saves[$runKey] = @{ n=$p.saves; last=$p.last } }
   if ($p.build) { $build = $p.build }
+  # A process that has stopped logging is hung (2026-10-22: froze at 05:59Z, players who
+  # left after that never got a leave line). Treat it as a crash at its last line.
+  if ($isLive -and $serverUp -and ((Get-Date) - (ParseIso $p.last)).TotalMinutes -gt $StallMinutes) {
+    Write-Host "Live log silent since $($p.last): server process is hung, counting it as down."
+    $serverUp = $false
+  }
   # A run is over if its log was rotated, or it's the live log and the server isn't running.
   if (-not $isLive -or -not $serverUp) {
     $endKind = if ($p.clean -and -not $p.fatal) { "stop" } else { "crash" }
